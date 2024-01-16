@@ -1,5 +1,7 @@
+
 import streamlit as st
 import pandas as pd
+import requests
 
 st.title("My Mom's New Healthy Diner")
 
@@ -21,8 +23,7 @@ fruits_to_show = my_fruit_list[my_fruit_list['Fruit'].isin(fruits_selected)]
 # Display the table on the page.
 st.dataframe(fruits_to_show)
 
-#New Section to display fruityvice api response
-streamlit. header('Fruityvice Fruit Advice!')
-import requests
-fruityvice_response = requests.get ("https://fruityvice.com/api/fruit/watermelon")
-streamlit.text(fruityvice_response.json())
+# New Section to display fruityvice api response
+st.header('Fruityvice Fruit Advice!')
+fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
+st.text(fruityvice_response.json())
