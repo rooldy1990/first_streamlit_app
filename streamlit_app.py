@@ -42,10 +42,13 @@ my_data_rows = my_cur.fetchall()
 st.header("The fruit load list contains : ")
 st.dataframe(my_data_rows)
 
-# Adding a multiselect for the user to choose multiple fruits to add
-fruits_to_add = st.multiselect("What fruit would you like to add ? :", my_fruit_list['Fruit'].unique())
+# Adding a textbox for the user to input a new fruit to add
+new_fruit = st.text_input("Enter a new fruit:")
+fruits_to_add_existing = st.multiselect("Select existing fruits to add to the list:", my_fruit_list['Fruit'].unique())
 
-# If the user has selected fruits, add them to the list
-if fruits_to_add:
-# Update your Snowflake table or any other storage mechanism as needed
-    st.success(f"Fruits {', '.join(fruits_to_add)} have been added to the list!")
+# If the user presses Enter or clicks the button, add the new fruit to the list
+if new_fruit or fruits_to_add_existing:
+    fruits_added = [new_fruit] if new_fruit else []
+    fruits_added.extend(fruits_to_add_existing)
+    # Update your Snowflake table or any other storage mechanism as needed
+    st.success(f"Fruits {', '.join(fruits_added)} have been added to the list!")
