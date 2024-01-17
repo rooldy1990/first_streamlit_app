@@ -43,7 +43,7 @@ st.header("The fruit load list contains : ")
 st.dataframe(my_data_rows)
 
 # Adding a textbox for the user to input a new fruit to add
-new_fruit = st.text_input("Enter a new fruit:")
+new_fruit = st.text_input("What fruit would you like to add :")
 fruits_to_add_existing = st.multiselect("Select existing fruits to add to the list:", my_fruit_list['Fruit'].unique())
 
 # If the user presses Enter or clicks the button, add the new fruit to the list
