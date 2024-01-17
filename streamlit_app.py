@@ -41,3 +41,7 @@ my_cur.execute("select * from fruit_load_list")
 my_data_rows = my_cur.fetchall()
 st.header("The fruit load list contains : ")
 st.dataframe(my_data_rows)
+
+# Let's put a pick list here so they can pick the fruit they want to include
+fruits_add = st.multiselect("What fruits would you like to add ?")
+
