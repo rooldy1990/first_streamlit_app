@@ -43,7 +43,7 @@ st.header("The fruit load list contains : ")
 st.dataframe(my_data_rows)
 
 # Adding a multiselect for the user to choose multiple fruits to add
-fruits_to_add = st.multiselect("Select fruits to add to the list:", my_fruit_list['Fruit'].unique())
+fruits_to_add = st.multiselect("What fruit would you like to add ? :", my_fruit_list['Fruit'].unique())
 
 # If the user has selected fruits, add them to the list
 if fruits_to_add:
