@@ -42,6 +42,10 @@ my_data_rows = my_cur.fetchall()
 st.header("The fruit load list contains : ")
 st.dataframe(my_data_rows)
 
-# Let's put a pick list here so they can add the jackfruit they want to include
-fruits_add = st.multiselect("What fruits would you like to add? ", my_fruit_list['Fruit'].unique(), ['jackfruit'])
-fruit_to_add = my_fruit_list[my_fruit_list['Fruit'].isin(fruits_add)]
+# Adding a multiselect for the user to choose multiple fruits to add
+fruits_to_add = st.multiselect("Select fruits to add to the list:", my_fruit_list['Fruit'].unique())
+
+# If the user has selected fruits, add them to the list
+if fruits_to_add:
+# Update your Snowflake table or any other storage mechanism as needed
+    st.success(f"Fruits {', '.join(fruits_to_add)} have been added to the list!")
