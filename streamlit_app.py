@@ -42,6 +42,6 @@ my_data_rows = my_cur.fetchall()
 st.header("The fruit load list contains : ")
 st.dataframe(my_data_rows)
 
-# Let's put a pick list here so they can pick the fruit they want to include
-fruits_add = st.multiselect("What fruits would you like to add ?", my_fruit_list['Fruit'].add(), ['jackfruit'])
-fruit_to_add = my_fruit_list[my_fruit_list['Fruit'].isin(fruit_added)]
+# Let's put a pick list here so they can add the jackfruit they want to include
+fruits_add = st.multiselect("What fruits would you like to add? ", my_fruit_list['Fruit'].unique(), ['jackfruit'])
+fruit_to_add = my_fruit_list[my_fruit_list['Fruit'].isin(fruits_add)]
