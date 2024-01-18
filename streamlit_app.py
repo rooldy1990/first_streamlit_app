@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import requests
 import snowflake.connector
-from urllib.error import URLError
 
 st.title("My Mom's New Healthy Diner")
 
@@ -24,20 +23,23 @@ fruits_to_show = my_fruit_list[my_fruit_list['Fruit'].isin(fruits_selected)]
 # Display the table on the page.
 st.dataframe(fruits_to_show)
 
-#create the repeatable code block (called a function)
+# create the repeatable code block (called a function)
 def get_fruityvice_data(this_fruit_choice):
     fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + this_fruit_choice)
-    fruityvice_normalized = pandas. json_normalize(fruityvice_response.json())
+    fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
     return fruityvice_normalized 
-#New Section to display fruityvice api response
+
+# New Section to display fruityvice api response
 st.header('Fruityvice Fruit Advice!')
 try:
-    fruit_choice = st.text_input( 'What fruit would you like information about?')
+    fruit_choice = st.text_input('What fruit would you like information about?')
     if not fruit_choice:
         st.error("Please select a fruit to get information.")
     else:
         back_from_function = get_fruityvice_data(fruit_choice)
         st.dataframe(back_from_function)
+except Exception as e:
+    st.error(f"Error: {e}")
 
 # Connecting to Snowflake
 my_cnx = snowflake.connector.connect(**st.secrets["snowflake"])
@@ -54,11 +56,11 @@ st.dataframe(my_data_rows)
 # Allow the end user to add a fruit to the list
 def insert_row_snowflake(new_fruit):
     with my_cnx.cursor() as my_cur:
+        # Make sure to complete the SQL query according to your table structure
         my_cur.execute("insert into fruit_load_list values ('from streamlit')")
         return "Thanks for adding " + new_fruit
-        
-add_my_fruit = streamlit.text_input( 'What fruit would you like to add ?')
-if streamlit.button('Add a Fruit to the List'):
-    my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+
+add_my_fruit = st.text_input('What fruit would you like to add?')
+if st.button('Add a Fruit to the List'):
     back_from_function = insert_row_snowflake(add_my_fruit)
-    streamlit.text(back_from_function)
+    st.text(back_from_function)
