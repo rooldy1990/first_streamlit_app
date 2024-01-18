@@ -1,6 +1,6 @@
 import streamlit as st
-#import pandas as pd
-#import requests
+import pandas as pd
+import requests
 import snowflake.connector
 from urllib.error import URLError
 
@@ -24,31 +24,33 @@ fruits_to_show = my_fruit_list[my_fruit_list['Fruit'].isin(fruits_selected)]
 # Display the table on the page.
 st.dataframe(fruits_to_show)
 
-#New Section to display fruityvice api response
+# New Section to display fruityvice API response
 st.header('Fruityvice Fruit Advice!')
 try:
-    fruit_choice = st.text_input( 'What fruit would you like information about?')
+    fruit_choice = st.text_input('What fruit would you like information about?')
     if not fruit_choice:
-        st.error ("Please select a fruit to get information.")
+        st.error("Please select a fruit to get information.")
     else:
-        fruityvice_response = requests.get ("https://fruityvice.com/api/fruit/" + fruit_choice)
-        fruityvice_normalized = pandas.json_normalize(fruityvice_response.json())
+        fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_choice)
+        fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
         st.dataframe(fruityvice_normalized)
 except URLError as e:
-    st.error()
+    st.error(f"Error: {e}")
 
-# don't run anything past here while we troubleshoot
-streamlit.stop()
-
+# Connecting to Snowflake
 my_cnx = snowflake.connector.connect(**st.secrets["snowflake"])
 my_cur = my_cnx.cursor()
+
+# Fetching data from the Snowflake table
 my_cur.execute("select * from fruit_load_list")
 my_data_rows = my_cur.fetchall()
-st.header("The fruit load list contains : ")
+
+# Displaying the Snowflake table data
+st.header("The fruit load list contains:")
 st.dataframe(my_data_rows)
 
 # Adding a textbox for the user to input a new fruit to add
-new_fruit = st.text_input("What fruit would you like to add :")
+new_fruit = st.text_input("What fruit would you like to add:")
 fruits_to_add_existing = st.multiselect("Select existing fruits to add to the list:", my_fruit_list['Fruit'].unique())
 
 # If the user presses Enter or clicks the button, add the new fruit to the list
