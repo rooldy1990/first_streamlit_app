@@ -1,3 +1,4 @@
+
 import streamlit as st
 import pandas as pd
 import requests
@@ -41,17 +42,11 @@ try:
 except Exception as e:
     st.error(f"Error: {e}")
 
-# Connecting to Snowflake
-my_cnx = snowflake.connector.connect(**st.secrets["snowflake"])
-my_cur = my_cnx.cursor()
-
-# Fetching data from the Snowflake table
-my_cur.execute("select * from fruit_load_list")
-my_data_rows = my_cur.fetchall()
-
-# Displaying the Snowflake table data
-st.header("The fruit load list contains:")
-st.dataframe(my_data_rows)
+# Allow the end user to add a fruit to the list
+def insert_row_snowflake(new_fruit):
+    with my_cnx.cursor() as my_cur:
+        my_cur. execute("insert into fruit load_list values ('" + new_fruit +"') ")
+        return "Thanks for adding " + new_fruit
 
 # Allow the end user to add a fruit to the list
 def insert_row_snowflake(new_fruit):
